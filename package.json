@@ -1,5 +1,5 @@
 {
-  "name": "dashboard",
+  "name": "hyperliquid-arb-dashboard",
   "version": "0.1.0",
   "private": true,
   "scripts": {
