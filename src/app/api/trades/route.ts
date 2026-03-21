@@ -52,7 +52,7 @@ const supabaseKey = process.env.SUPABASE_ANON_KEY;
 
 if (!supabaseUrl || !supabaseKey) {
   console.error(
-    "Supabase environment variables SUPABASE_URL and SUPABASE_ANON_KEY must be set"
+    "Supabase environment variables SUPABASE_URL and SUPABASE_ANON_KEY must be set",
   );
 }
 
@@ -71,20 +71,44 @@ export async function GET() {
     if (!supabase) {
       return NextResponse.json(
         { error: "Supabase is not configured on the server" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
-    const { data, error } = await supabase
-      .from("trades")
-      .select("*")
-      .order("timestamp", { ascending: false });
+    const PAGE_SIZE = 1000;
+    let allData: TradeRow[] = [];
+    let page = 0;
+    let fetchError = null;
+
+    while (true) {
+      const { data: pageData, error: pageError } = await supabase
+        .from("trades")
+        .select("*")
+        .order("timestamp", { ascending: false })
+        .range(page * PAGE_SIZE, (page + 1) * PAGE_SIZE - 1);
+
+      if (pageError) {
+        fetchError = pageError;
+        break;
+      }
+
+      if (!pageData || pageData.length === 0) break;
+
+      allData = allData.concat(pageData);
+
+      if (pageData.length < PAGE_SIZE) break;
+
+      page++;
+    }
+
+    const data = allData;
+    const error = fetchError;
 
     if (error) {
       console.error("Error fetching trades from Supabase:", error);
       return NextResponse.json(
         { error: "Failed to fetch trades from Supabase" },
-        { status: 500 }
+        { status: 500 },
       );
     }
 
@@ -142,7 +166,7 @@ export async function GET() {
     console.error("Error handling trades request:", error);
     return NextResponse.json(
       { error: "Failed to fetch trade history" },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }
