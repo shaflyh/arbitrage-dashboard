@@ -11,14 +11,27 @@ import { TradeTable } from "@/components/trade-table";
 import { DateRangePicker } from "@/components/date-range-picker";
 import { Button } from "@/components/ui/button";
 import { RefreshCw, Wallet } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
-  const { trades, stats, loading, error, lastUpdated, refetch, dateRange, setDateRange } =
-    useTrades(
-      60000, // Auto-refresh every 60 seconds
-    );
+  const {
+    trades,
+    stats,
+    loading,
+    error,
+    lastUpdated,
+    refetch,
+    dateRange,
+    setDateRange,
+  } = useTrades(
+    60000, // Auto-refresh every 60 seconds
+  );
 
-  const { balances, loading: balancesLoading, refetch: refetchBalances } = useBalances(60000); // Auto-refresh balances every 60 seconds
+  const {
+    balances,
+    loading: balancesLoading,
+    refetch: refetchBalances,
+  } = useBalances(60000); // Auto-refresh balances every 60 seconds
 
   if (loading && trades.length === 0) {
     return (
@@ -42,10 +55,21 @@ export default function Home() {
         {/* Header */}
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-3xl font-bold tracking-tight">Hyperliquid Arbitrage Dashboard</h1>
-            <p className="text-sm text-muted-foreground">
-              {lastUpdated && `Last updated: ${new Date(lastUpdated).toLocaleString()}`}
-            </p>
+            <h1 className="text-3xl font-bold tracking-tight">
+              Hyperliquid Arbitrage Dashboard
+            </h1>
+            <div className="flex items-center gap-3">
+              <p className="text-sm text-muted-foreground">
+                {lastUpdated &&
+                  `Last updated: ${new Date(lastUpdated).toLocaleString()}`}
+              </p>
+              <Link
+                href="/bounce"
+                className="text-sm text-muted-foreground underline underline-offset-2 hover:text-foreground"
+              >
+                Bounce Arb →
+              </Link>
+            </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
             <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-md border bg-card text-card-foreground">
@@ -73,7 +97,10 @@ export default function Home() {
               </span>
               <span className="text-xs text-muted-foreground">USD₮0</span>
             </div>
-            <DateRangePicker dateRange={dateRange} onDateRangeChange={setDateRange} />
+            <DateRangePicker
+              dateRange={dateRange}
+              onDateRangeChange={setDateRange}
+            />
             <Button
               onClick={() => {
                 refetch();

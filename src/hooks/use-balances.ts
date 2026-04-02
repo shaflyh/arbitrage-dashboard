@@ -2,8 +2,13 @@ import { useState, useEffect, useCallback } from "react";
 
 interface WalletBalances {
   address: string;
+  hype: string;
   whype: string;
   usdt: string;
+  usdc: string;
+  hype3l: string;
+  hype3s: string;
+  btc3l: string;
   timestamp: number;
 }
 
@@ -14,7 +19,10 @@ interface UseBalancesReturn {
   refetch: () => Promise<void>;
 }
 
-export function useBalances(refreshIntervalMs?: number): UseBalancesReturn {
+export function useBalances(
+  refreshIntervalMs?: number,
+  address?: string,
+): UseBalancesReturn {
   const [balances, setBalances] = useState<WalletBalances | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -24,7 +32,10 @@ export function useBalances(refreshIntervalMs?: number): UseBalancesReturn {
       setLoading(true);
       setError(null);
 
-      const response = await fetch("/api/balances");
+      const url = address
+        ? `/api/balances?address=${address}`
+        : "/api/balances";
+      const response = await fetch(url);
 
       if (!response.ok) {
         const errorData = await response.json();
@@ -40,7 +51,7 @@ export function useBalances(refreshIntervalMs?: number): UseBalancesReturn {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [address]);
 
   // Initial fetch
   useEffect(() => {
