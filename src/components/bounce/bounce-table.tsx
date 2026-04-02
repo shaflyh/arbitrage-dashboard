@@ -48,7 +48,6 @@ export function BounceTable({ logs }: BounceTableProps) {
                 <TableHead className="text-right">Expected PnL</TableHead>
                 <TableHead className="text-right">Actual PnL</TableHead>
                 <TableHead className="text-right">Gas (HYPE)</TableHead>
-                <TableHead className="text-right">Net PnL</TableHead>
                 <TableHead className="text-right">Wallet Before</TableHead>
                 <TableHead>Skip Reason</TableHead>
               </TableRow>
@@ -57,9 +56,6 @@ export function BounceTable({ logs }: BounceTableProps) {
               {displayed.map((log) => {
                 const isExecuted = log.status === "executed";
                 const actualPnl = log.actualPnlUsdc ?? null;
-                const gas = log.gasSpent ?? 0;
-                const netPnl = actualPnl !== null ? actualPnl - gas : null;
-                const netPositive = netPnl !== null && netPnl >= 0;
 
                 return (
                   <TableRow key={log.id}>
@@ -103,19 +99,8 @@ export function BounceTable({ logs }: BounceTableProps) {
                       {actualPnl !== null ? `$${actualPnl.toFixed(4)}` : "—"}
                     </TableCell>
                     <TableCell className="text-right font-mono text-muted-foreground">
-                      {gas > 0 ? `${gas.toFixed(4)}` : "—"}
-                    </TableCell>
-                    <TableCell
-                      className={`text-right font-mono font-semibold ${
-                        netPnl === null
-                          ? "text-muted-foreground"
-                          : netPositive
-                            ? "text-green-500"
-                            : "text-red-500"
-                      }`}
-                    >
-                      {netPnl !== null
-                        ? `${netPositive ? "+" : ""}$${netPnl.toFixed(4)}`
+                      {log.gasSpent != null && log.gasSpent > 0
+                        ? log.gasSpent.toFixed(6)
                         : "—"}
                     </TableCell>
                     <TableCell className="text-right font-mono">

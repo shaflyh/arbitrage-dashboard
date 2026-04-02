@@ -94,7 +94,6 @@ function calculateStats(logs: BounceExecutionLog[]): BounceStats {
       totalExpectedPnl: 0,
       totalGasSpent: 0,
       avgPnlPerExecution: 0,
-      netPnlAfterGas: 0,
     };
   }
 
@@ -105,10 +104,7 @@ function calculateStats(logs: BounceExecutionLog[]): BounceStats {
     (sum, l) => sum + (l.actualPnlUsdc ?? 0),
     0,
   );
-  const totalGasSpent = executed.reduce(
-    (sum, l) => sum + (l.gasSpent ?? 0),
-    0,
-  );
+  const totalGasSpent = executed.reduce((sum, l) => sum + (l.gasSpent ?? 0), 0);
   const totalExpectedPnl = logs.reduce(
     (sum, l) => sum + (l.expectedPnlUsdc ?? 0),
     0,
@@ -124,6 +120,5 @@ function calculateStats(logs: BounceExecutionLog[]): BounceStats {
     totalGasSpent,
     avgPnlPerExecution:
       executed.length > 0 ? totalActualPnl / executed.length : 0,
-    netPnlAfterGas: totalActualPnl - totalGasSpent,
   };
 }

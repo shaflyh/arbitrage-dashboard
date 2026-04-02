@@ -23,5 +23,4 @@ export interface BounceStats {
   totalExpectedPnl: number;
   totalGasSpent: number;
   avgPnlPerExecution: number;
-  netPnlAfterGas: number;
 }
