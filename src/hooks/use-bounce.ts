@@ -42,9 +42,18 @@ export function useBounce(autoRefreshInterval?: number) {
   }, []);
 
   const logs = useMemo(() => {
-    if (!dateRange.from && !dateRange.to) return allLogs;
-
     return allLogs.filter((log) => {
+      // Exclude failed/reverted transactions where actual PnL equals negative trade size
+      if (
+        log.status === "executed" &&
+        log.actualPnlUsdc !== null &&
+        log.sizeUsdc > 0 &&
+        Math.abs(log.actualPnlUsdc + log.sizeUsdc) < 0.01
+      ) {
+        return false;
+      }
+
+      if (!dateRange.from && !dateRange.to) return true;
       if (!log.generatedAt) return true;
       const logDate = new Date(log.generatedAt);
 
