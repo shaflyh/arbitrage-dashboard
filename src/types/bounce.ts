@@ -4,6 +4,7 @@ export interface BounceExecutionLog {
   direction: string; // 'buy-redeem' | 'mint-sell'
   status: string; // 'executed' | 'skipped'
   targetSymbol: string;
+  dex: string; // 'kittenswap' | 'hyperswap' | 'prjx'
   account: string;
   sizeUsdc: number;
   expectedPnlUsdc: number;
@@ -12,6 +13,7 @@ export interface BounceExecutionLog {
   walletUsdcBefore: number;
   walletUsdcAfter: number | null;
   skipReason: string | null;
+  txHash: string | null;
 }
 
 export interface BounceStats {

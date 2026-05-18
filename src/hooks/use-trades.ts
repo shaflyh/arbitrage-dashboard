@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { getStartOfToday } from "@/lib/date";
 import type { Trade, TradeStats } from "@/types/trade";
 
 interface TradesResponse {
@@ -16,7 +17,10 @@ export interface DateRange {
 
 export function useTrades(autoRefreshInterval?: number) {
   const [allTrades, setAllTrades] = useState<Trade[]>([]);
-  const [dateRange, setDateRange] = useState<DateRange>({ from: null, to: null });
+  const [dateRange, setDateRange] = useState<DateRange>({
+    from: getStartOfToday(),
+    to: null,
+  });
   const [stats, setStats] = useState<TradeStats | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);

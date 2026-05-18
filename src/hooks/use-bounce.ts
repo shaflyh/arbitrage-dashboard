@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useMemo } from "react";
+import { getStartOfToday } from "@/lib/date";
 import type { BounceExecutionLog, BounceStats } from "@/types/bounce";
 import type { DateRange } from "@/hooks/use-trades";
 
@@ -13,7 +14,7 @@ interface BounceResponse {
 export function useBounce(autoRefreshInterval?: number) {
   const [allLogs, setAllLogs] = useState<BounceExecutionLog[]>([]);
   const [dateRange, setDateRange] = useState<DateRange>({
-    from: null,
+    from: getStartOfToday(),
     to: null,
   });
   const [stats, setStats] = useState<BounceStats | null>(null);

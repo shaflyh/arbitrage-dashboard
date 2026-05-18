@@ -8,6 +8,7 @@ interface BounceRow {
   direction: string;
   status: string;
   target_symbol: string;
+  dex: string | null;
   account: string;
   size_usdc: string | number | null;
   expected_pnl_usdc: string | number | null;
@@ -16,6 +17,7 @@ interface BounceRow {
   wallet_usdc_before: string | number | null;
   wallet_usdc_after: string | number | null;
   skip_reason: string | null;
+  tx_hash: string | null;
 }
 
 const supabaseUrl = process.env.SUPABASE_URL;
@@ -95,6 +97,8 @@ export async function GET() {
       walletUsdcBefore: toNumber(row.wallet_usdc_before),
       walletUsdcAfter: toNullableNumber(row.wallet_usdc_after),
       skipReason: row.skip_reason,
+      dex: row.dex ?? "kittenswap",
+      txHash: row.tx_hash,
     }));
 
     return NextResponse.json({
