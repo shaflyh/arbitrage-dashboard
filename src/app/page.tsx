@@ -69,6 +69,12 @@ export default function Home() {
               >
                 Bounce Arb →
               </Link>
+              <Link
+                href="/bounce-contract"
+                className="text-sm text-muted-foreground underline underline-offset-2 hover:text-foreground"
+              >
+                Bounce Contract →
+              </Link>
             </div>
           </div>
           <div className="flex flex-col sm:flex-row gap-2 sm:items-center">
